@@ -1,0 +1,526 @@
+{
+  "run": "HW5 Problem 9 — full board run on a freshly reset database",
+  "model": "gpt-6-luna (via Portkey), every agent",
+  "shop_today": "2026-08-31",
+  "starting_checking_balance": 3400.0,
+  "ending_checking_balance": 152.0,
+  "ending_balance_matches_cash_accounts": true,
+  "cash_check": "3400.00 − 840.00 − 8.00 − 2400.00 = 152.00 = cash_accounts.checking",
+  "human_operator_note": "Approvals and the #103 decision were signed as 'Mercy (via Claude Code)': the vibe coder clicked on the human's behalf at the human's request; the #103 closing decision (fill 8 from stock, decline 12) was chosen by the human.",
+  "tickets": [
+    {
+      "id": 101,
+      "type": "customer_order",
+      "requester": "Tauhid Zaman",
+      "subject": "Bulldog tee",
+      "final_status": "resolved",
+      "outcome": "Size S tee was out of stock (0 on hand, short 1). Invoice 501 ($840, 3 days overdue) was paid to unblock Bulldog Print Co, then a 1-unit purchase order ($8) was placed, arriving about 2026-09-05. Tauhid has an unsent draft saying the tee is on order.",
+      "cash_change": -848.0,
+      "agents": {
+        "Boss": "Read the ticket, sent Inventory, Accounting and Customer Service in parallel, then after each human approval took the ticket back: asked for the PO once the invoice was paid, and closed it as resolved once both payments were made.",
+        "Inventory": "check_stock → 0 on hand, shortfall 1; list_vendors → Bulldog Print Co (apparel, 5-day lead) blocked by invoice 501; on the second run confirmed the block was gone and passed the $8 restock to Accounting.",
+        "Accounting": "Checked cash and invoice 501, queued the $840 invoice payment first (approval #1) and deliberately held the PO while the vendor was blocked; on the second run queued PO #1 for 1 × CC-TEE-WHITE S at $8 (approval #2).",
+        "Customer Service": "Wrote three unsent drafts to Tauhid as the facts changed (#1 out of stock, #2 restock pending approval with ETA estimate, #3 on order, ETA 2026-09-05).",
+        "Facilities": "Not involved."
+      },
+      "human_approvals": [
+        {
+          "approval_id": 1,
+          "kind": "invoice_payment",
+          "amount": 840.0,
+          "summary": "Pay invoice #501 to Bulldog Print Co — $840.00",
+          "requested_by": "Accounting",
+          "decision": "approve",
+          "decided_by": "Mercy (via Claude Code)",
+          "status": "paid",
+          "result": "Paid $840.00 (payment #1). Invoice #501 marked paid. Cash now $2,560.00."
+        },
+        {
+          "approval_id": 2,
+          "kind": "purchase_order",
+          "amount": 8.0,
+          "summary": "Purchase order #1: 1 × CC-TEE-WHITE (S) from Bulldog Print Co — $8.00",
+          "requested_by": "Accounting",
+          "decision": "approve",
+          "decided_by": "Mercy (via Claude Code)",
+          "status": "paid",
+          "result": "Paid $8.00 (payment #2). PO #1 placed with Bulldog Print Co; expected 2026-09-05. Cash now $2,552.00."
+        }
+      ],
+      "customer_draft": "Draft #3 (not sent): \"Your Classic Bulldog Tee in size S is on order. It isn't in stock yet; the estimated arrival is September 5, 2026.\"",
+      "runs": [
+        {
+          "run": 1,
+          "run_id": "b6af624aaba6",
+          "boss_called_first": [
+            "Inventory",
+            "Accounting",
+            "Customer Service"
+          ],
+          "delegations": [
+            "Boss → Accounting",
+            "Boss → Customer Service",
+            "Inventory → Accounting",
+            "Boss → Inventory"
+          ],
+          "agents": [
+            "Boss",
+            "Inventory",
+            "Accounting",
+            "Customer Service"
+          ],
+          "tools_by_agent": {
+            "Boss": {
+              "get_ticket": 2,
+              "get_today": 1,
+              "list_approvals": 1,
+              "get_cash": 1,
+              "update_ticket_status": 1
+            },
+            "Customer Service": {
+              "get_ticket": 1,
+              "list_drafts": 1,
+              "check_stock": 1,
+              "draft_customer_message": 1
+            },
+            "Inventory": {
+              "check_stock": 1,
+              "get_today": 1,
+              "list_vendors": 1,
+              "get_invoice_status": 1
+            },
+            "Accounting": {
+              "get_invoice_status": 2,
+              "get_cash": 2,
+              "get_today": 1,
+              "request_invoice_payment": 1
+            }
+          },
+          "final_status": "awaiting_approval",
+          "agent_loops": 5,
+          "model_requests": 16,
+          "tokens": {
+            "in": 38701,
+            "out": 3188
+          }
+        },
+        {
+          "run": 2,
+          "run_id": "e63b17a742c9",
+          "boss_called_first": [
+            "Inventory"
+          ],
+          "delegations": [
+            "Inventory → Accounting",
+            "Boss → Inventory",
+            "Boss → Customer Service"
+          ],
+          "agents": [
+            "Boss",
+            "Inventory",
+            "Accounting",
+            "Customer Service"
+          ],
+          "tools_by_agent": {
+            "Boss": {
+              "get_ticket": 2,
+              "get_cash": 1,
+              "get_today": 1,
+              "list_approvals": 1,
+              "update_ticket_status": 1
+            },
+            "Inventory": {
+              "check_stock": 1,
+              "list_vendors": 1,
+              "get_pricing": 1,
+              "get_today": 1
+            },
+            "Accounting": {
+              "get_cash": 1,
+              "get_pricing": 1,
+              "request_purchase_order": 1
+            },
+            "Customer Service": {
+              "get_ticket": 1,
+              "list_drafts": 1,
+              "draft_customer_message": 1
+            }
+          },
+          "final_status": "awaiting_approval",
+          "agent_loops": 4,
+          "model_requests": 16,
+          "tokens": {
+            "in": 44964,
+            "out": 2811
+          }
+        },
+        {
+          "run": 3,
+          "run_id": "2c3bd425ced3",
+          "boss_called_first": [
+            "Customer Service"
+          ],
+          "delegations": [
+            "Boss → Customer Service"
+          ],
+          "agents": [
+            "Boss",
+            "Customer Service"
+          ],
+          "tools_by_agent": {
+            "Boss": {
+              "get_ticket": 1,
+              "get_today": 1,
+              "get_cash": 1,
+              "list_payments": 1,
+              "list_approvals": 1,
+              "update_ticket_status": 1
+            },
+            "Customer Service": {
+              "get_ticket": 1,
+              "list_drafts": 1,
+              "get_today": 1,
+              "check_stock": 1,
+              "draft_customer_message": 1
+            }
+          },
+          "final_status": "resolved",
+          "agent_loops": 2,
+          "model_requests": 9,
+          "tokens": {
+            "in": 28586,
+            "out": 1447
+          }
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "type": "rent_notice",
+      "requester": "Elm City Properties",
+      "subject": "Rent due",
+      "final_status": "resolved",
+      "outcome": "Facilities confirmed the landlord's notice against lease 1 ($2,400 due 2026-09-02, 2 days out, not overdue). Rent was paid after human approval and the lease's next_due moved to 2026-10-02.",
+      "cash_change": -2400.0,
+      "agents": {
+        "Boss": "Called Facilities only; after the human paid the rent it verified payment #3 itself and closed the ticket with no further delegation.",
+        "Facilities": "get_rent_due(1) → $2,400 to Elm City Properties due 2026-09-02; handed the confirmed lease, amount and date straight to Accounting.",
+        "Accounting": "Checked cash ($2,552 available, enough) and queued the rent payment (approval #3).",
+        "Inventory": "Not involved.",
+        "Customer Service": "Not involved (the requester is the landlord; we don't contact landlords)."
+      },
+      "human_approvals": [
+        {
+          "approval_id": 3,
+          "kind": "rent_payment",
+          "amount": 2400.0,
+          "summary": "Pay rent for Chapel Street shop to Elm City Properties — $2,400.00",
+          "requested_by": "Accounting",
+          "decision": "approve",
+          "decided_by": "Mercy (via Claude Code)",
+          "status": "paid",
+          "result": "Paid $2,400.00 (payment #3). Rent for 2026-09-02 paid; lease next_due moved to 2026-10-02. Cash now $152.00."
+        }
+      ],
+      "runs": [
+        {
+          "run": 1,
+          "run_id": "ad9a9d7aa0f1",
+          "boss_called_first": [
+            "Facilities"
+          ],
+          "delegations": [
+            "Facilities → Accounting",
+            "Boss → Facilities"
+          ],
+          "agents": [
+            "Boss",
+            "Facilities",
+            "Accounting"
+          ],
+          "tools_by_agent": {
+            "Boss": {
+              "get_ticket": 2,
+              "get_today": 1,
+              "get_cash": 2,
+              "list_approvals": 2,
+              "add_ticket_note": 1,
+              "update_ticket_status": 1
+            },
+            "Facilities": {
+              "get_today": 1,
+              "get_rent_due": 1,
+              "list_approvals": 1,
+              "get_cash": 1
+            },
+            "Accounting": {
+              "get_cash": 1,
+              "get_rent_due": 1,
+              "get_today": 1,
+              "request_rent_payment": 1
+            }
+          },
+          "final_status": "awaiting_approval",
+          "agent_loops": 3,
+          "model_requests": 11,
+          "tokens": {
+            "in": 25478,
+            "out": 1582
+          }
+        },
+        {
+          "run": 2,
+          "run_id": "4ac3a82d5677",
+          "boss_called_first": [],
+          "delegations": [],
+          "agents": [
+            "Boss"
+          ],
+          "tools_by_agent": {
+            "Boss": {
+              "get_ticket": 1,
+              "get_today": 1,
+              "get_cash": 1,
+              "list_approvals": 1,
+              "update_ticket_status": 1
+            }
+          },
+          "final_status": "resolved",
+          "agent_loops": 1,
+          "model_requests": 3,
+          "tokens": {
+            "in": 7394,
+            "out": 267
+          }
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "type": "price_override",
+      "requester": "Yale AI Club",
+      "subject": "Bulk hoodie discount",
+      "final_status": "resolved",
+      "outcome": "Bulk price of $36.67/hoodie approved (40% gross margin, 36.8% off $58). Only 8 size-M hoodies were in stock; restocking the other 12 would cost $264 with only $152 cash, so the team marked it blocked. The human decided to fill the 8 in stock and decline the remaining 12; the Boss then resolved it. No cash moved.",
+      "cash_change": 0.0,
+      "agents": {
+        "Boss": "Sent Inventory, Accounting and Customer Service in parallel; first run → awaiting_approval (price), second run → blocked (cash too low to restock), third run followed the human's note and resolved.",
+        "Accounting": "get_pricing + check_margin → proposed $36.67 (deepest price keeping a 40% margin) and queued price override approval #4; checked cash and refused to queue the $264 restock it couldn't afford.",
+        "Inventory": "check_stock → 8 on hand, shortfall 12; list_vendors → Bulldog Print Co (5-day lead, no longer blocked after invoice 501 was paid).",
+        "Customer Service": "Wrote four unsent drafts to the Yale AI Club as facts changed, ending with #7: 8 hoodies at $36.67 ($293.36 before tax), remaining 12 declined for now.",
+        "Facilities": "Not involved."
+      },
+      "human_approvals": [
+        {
+          "approval_id": 4,
+          "kind": "price_override",
+          "amount": 0.0,
+          "summary": "Price override for ticket #103: 20 × CC-HOOD-NAVY at $36.67 (36.8% off $58.00)",
+          "requested_by": "Accounting",
+          "decision": "approve",
+          "decided_by": "Mercy (via Claude Code)",
+          "status": "approved",
+          "result": "Price approved by Mercy (via Claude Code)"
+        }
+      ],
+      "human_notes": [
+        {
+          "author": "Mercy (via Claude Code)",
+          "note": "Fill the order from stock only: sell the 8 size-M hoodies on hand at the approved $36.67 each (approval #4); decline the other 12 for now, no restock, no more spending; have Customer Service tell the club, then close the ticket."
+        }
+      ],
+      "customer_draft": "Draft #7 (not sent): \"We can fulfill 8 size-M CC-HOOD-NAVY hoodies from our current stock at the approved price of $36.67 each, for $293.36 before applicable tax. We're unable to fulfill the remaining 12 at this time.\"",
+      "runs": [
+        {
+          "run": 1,
+          "run_id": "541e9ce085c8",
+          "boss_called_first": [
+            "Inventory",
+            "Accounting",
+            "Customer Service"
+          ],
+          "delegations": [
+            "Boss → Accounting",
+            "Inventory → Accounting",
+            "Customer Service → Accounting",
+            "Boss → Inventory",
+            "Boss → Customer Service",
+            "Boss → Customer Service"
+          ],
+          "agents": [
+            "Boss",
+            "Inventory",
+            "Accounting",
+            "Customer Service"
+          ],
+          "tools_by_agent": {
+            "Boss": {
+              "get_ticket": 2,
+              "get_today": 1,
+              "update_ticket_status": 1
+            },
+            "Inventory": {
+              "get_today": 1,
+              "check_stock": 1,
+              "list_vendors": 1
+            },
+            "Customer Service": {
+              "get_ticket": 2,
+              "list_drafts": 2,
+              "get_today": 1,
+              "check_stock": 2,
+              "get_pricing": 2,
+              "draft_customer_message": 2
+            },
+            "Accounting": {
+              "get_cash": 2,
+              "get_pricing": 2,
+              "get_today": 3,
+              "list_vendors": 1,
+              "check_margin": 2,
+              "list_approvals": 1,
+              "list_payments": 1,
+              "request_price_override": 1
+            }
+          },
+          "final_status": "awaiting_approval",
+          "agent_loops": 7,
+          "model_requests": 29,
+          "tokens": {
+            "in": 71070,
+            "out": 5397
+          }
+        },
+        {
+          "run": 2,
+          "run_id": "94df39d56c94",
+          "boss_called_first": [
+            "Inventory",
+            "Accounting",
+            "Customer Service"
+          ],
+          "delegations": [
+            "Boss → Customer Service",
+            "Inventory → Accounting",
+            "Boss → Inventory",
+            "Accounting → Inventory",
+            "Boss → Accounting"
+          ],
+          "agents": [
+            "Boss",
+            "Inventory",
+            "Accounting",
+            "Customer Service"
+          ],
+          "tools_by_agent": {
+            "Boss": {
+              "get_ticket": 1,
+              "get_today": 1,
+              "get_cash": 1,
+              "list_approvals": 1,
+              "add_ticket_note": 1,
+              "update_ticket_status": 1
+            },
+            "Customer Service": {
+              "get_ticket": 1,
+              "check_stock": 1,
+              "list_drafts": 1,
+              "get_today": 1,
+              "draft_customer_message": 1
+            },
+            "Inventory": {
+              "get_today": 2,
+              "check_stock": 6,
+              "get_pricing": 2,
+              "list_vendors": 2,
+              "list_purchase_orders": 1
+            },
+            "Accounting": {
+              "get_cash": 2,
+              "list_approvals": 1,
+              "list_payments": 1,
+              "list_purchase_orders": 1
+            }
+          },
+          "final_status": "blocked",
+          "agent_loops": 6,
+          "model_requests": 18,
+          "tokens": {
+            "in": 47943,
+            "out": 4656
+          }
+        },
+        {
+          "run": 3,
+          "run_id": "2355c75aa514",
+          "boss_called_first": [
+            "Customer Service"
+          ],
+          "delegations": [
+            "Boss → Customer Service"
+          ],
+          "agents": [
+            "Boss",
+            "Customer Service"
+          ],
+          "tools_by_agent": {
+            "Boss": {
+              "get_ticket": 1,
+              "update_ticket_status": 1
+            },
+            "Customer Service": {
+              "get_ticket": 1,
+              "list_drafts": 1,
+              "get_today": 1,
+              "check_stock": 1,
+              "draft_customer_message": 1
+            }
+          },
+          "final_status": "resolved",
+          "agent_loops": 2,
+          "model_requests": 8,
+          "tokens": {
+            "in": 25064,
+            "out": 991
+          }
+        }
+      ]
+    }
+  ],
+  "payments": [
+    {
+      "id": 1,
+      "kind": "invoice",
+      "ref_id": 501,
+      "amount": 840.0,
+      "account": "checking",
+      "paid_at": "2026-08-31",
+      "approved_by": "Mercy (via Claude Code)"
+    },
+    {
+      "id": 2,
+      "kind": "purchase_order",
+      "ref_id": 1,
+      "amount": 8.0,
+      "account": "checking",
+      "paid_at": "2026-08-31",
+      "approved_by": "Mercy (via Claude Code)"
+    },
+    {
+      "id": 3,
+      "kind": "rent",
+      "ref_id": 1,
+      "amount": 2400.0,
+      "account": "checking",
+      "paid_at": "2026-08-31",
+      "approved_by": "Mercy (via Claude Code)"
+    }
+  ],
+  "usage": {
+    "runs": 8,
+    "tokens_in": 289200,
+    "tokens_out": 20339,
+    "model_requests": 110,
+    "agent_loops": 30
+  }
+}

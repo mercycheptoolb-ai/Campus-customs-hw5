@@ -1,0 +1,133 @@
+{
+  "description": "HW5 Problem 4 smoke test. Each tool was called by the vibe coder (Claude Code) through the campus-customs MCP server registered in hw5/.mcp.json. Each output is checked against direct SQL on data/campus_customs_new.db.",
+  "database": "data/campus_customs_new.db",
+  "mcp_config": ".mcp.json",
+  "shop_today": {
+    "source_sql": "SELECT date_today FROM desk;",
+    "value": "2026-08-31"
+  },
+  "tests": [
+    {
+      "ticket_id": 101,
+      "prompt": "Using the campus-customs MCP, check stock for CC-TEE-WHITE size S for ticket 101 that needs 1 unit.",
+      "tool": "check_stock",
+      "tool_call": "mcp__campus-customs__check_stock",
+      "arguments": {
+        "sku": "CC-TEE-WHITE",
+        "size": "S",
+        "needed_qty": 1
+      },
+      "tool_output": {
+        "sku": "CC-TEE-WHITE",
+        "name": "Classic Bulldog Tee",
+        "size": "S",
+        "qty": 0,
+        "location": "Aisle B",
+        "needed_qty": 1,
+        "shortfall": 1,
+        "can_fill_from_stock": false
+      },
+      "db_check": {
+        "sql": "SELECT * FROM inventory WHERE sku='CC-TEE-WHITE' AND size='S';",
+        "db_row": {
+          "sku": "CC-TEE-WHITE",
+          "name": "Classic Bulldog Tee",
+          "size": "S",
+          "qty": 0,
+          "location": "Aisle B"
+        },
+        "ticket_sql": "SELECT sku, size, qty FROM tickets WHERE id=101;",
+        "ticket_row": {
+          "sku": "CC-TEE-WHITE",
+          "size": "S",
+          "qty": 1
+        },
+        "derived": "shortfall = max(0, ticket qty 1 - on-hand qty 0) = 1, so can_fill_from_stock = false",
+        "matches": true
+      }
+    },
+    {
+      "ticket_id": 101,
+      "prompt": "Using the campus-customs MCP, get the status of invoice 501 for ticket 101.",
+      "tool": "get_invoice_status",
+      "tool_call": "mcp__campus-customs__get_invoice_status",
+      "arguments": {
+        "invoice_id": 501
+      },
+      "tool_output": {
+        "invoice_id": 501,
+        "amount": 840,
+        "due_date": "2026-08-28",
+        "status": "open",
+        "description": "Rush reprint CC-TEE-WHITE S",
+        "vendor_id": 1,
+        "vendor_name": "Bulldog Print Co",
+        "vendor_specialty": "apparel reprint",
+        "vendor_lead_days": 5,
+        "shop_today": "2026-08-31",
+        "is_open": true,
+        "days_overdue": 3,
+        "overdue": true,
+        "vendor_blocked": true
+      },
+      "db_check": {
+        "sql": "SELECT i.*, v.name AS vendor_name, v.specialty, v.lead_days FROM invoices i JOIN vendors v ON v.id=i.vendor_id WHERE i.id=501;",
+        "db_row": {
+          "id": 501,
+          "vendor_id": 1,
+          "amount": 840.0,
+          "due_date": "2026-08-28",
+          "status": "open",
+          "description": "Rush reprint CC-TEE-WHITE S",
+          "vendor_name": "Bulldog Print Co",
+          "specialty": "apparel reprint",
+          "lead_days": 5
+        },
+        "ticket_sql": "SELECT invoice_id FROM tickets WHERE id=101;",
+        "ticket_row": {
+          "invoice_id": 501
+        },
+        "derived": "status 'open' and desk date 2026-08-31 is 3 days after due_date 2026-08-28, so overdue = true and vendor_blocked = true",
+        "matches": true
+      }
+    },
+    {
+      "ticket_id": 102,
+      "prompt": "Using the campus-customs MCP, get the rent due for lease 1 for ticket 102.",
+      "tool": "get_rent_due",
+      "tool_call": "mcp__campus-customs__get_rent_due",
+      "arguments": {
+        "lease_id": 1
+      },
+      "tool_output": {
+        "lease_id": 1,
+        "space_name": "Chapel Street shop",
+        "landlord": "Elm City Properties",
+        "monthly_rent": 2400,
+        "next_due": "2026-09-02",
+        "notes": null,
+        "shop_today": "2026-08-31",
+        "days_until_due": 2,
+        "overdue": false
+      },
+      "db_check": {
+        "sql": "SELECT * FROM leases WHERE id=1;",
+        "db_row": {
+          "id": 1,
+          "space_name": "Chapel Street shop",
+          "landlord": "Elm City Properties",
+          "monthly_rent": 2400.0,
+          "next_due": "2026-09-02",
+          "notes": null
+        },
+        "ticket_sql": "SELECT lease_id, notes FROM tickets WHERE id=102;",
+        "ticket_row": {
+          "lease_id": 1,
+          "notes": "Email: shop rent due in 2 days."
+        },
+        "derived": "next_due 2026-09-02 minus desk date 2026-08-31 = 2 days, so overdue = false (this matches the ticket note 'rent due in 2 days')",
+        "matches": true
+      }
+    }
+  ]
+}
