@@ -113,6 +113,8 @@ A log of what I typed to my vibe coder (Claude Code) for each HW5 problem.
 
 > Continue HW5 Problem 4 — see the hw5-problem4-smoke memory note.
 
+**What was lacking after the first prompt:** Claude Code only loads a new MCP server when a session starts, so the tools couldn't be called in the session that added them. I had to start a new session in hw5/ and ask for each tool by name so the evidence came from real vibe-coder tool calls.
+
 ---
 
 ## Problem 5 — Build the agent team and grow MCP tools
@@ -231,4 +233,23 @@ A log of what I typed to my vibe coder (Claude Code) for each HW5 problem.
 > Tie every answer to this app and the three tickets you ran - use the tickets tabs and cash tab on the same page as your evidence. Generic AI essays without Campus Customs details will score low.
 
 **Follow-up prompt:** None needed yet. (The "could solve" bullet appears twice in my prompt; the reflection answers it once, alongside the "could not solve" section.)
+
+---
+
+## Problem 11 — Submit to GitHub
+
+**Prompt I typed:**
+
+> We are now moving to problem 11 titled submit to github. Here push my code to a public GitHub repository so graders can clone it. Put the repo URL in output/github_url.txt. Do not push my real .env to gitHub repo. Do include both database files under data/ (the original and my working copy) so graders can run my app easily. Please confirm that you have the following as my file layout:
+> hw5/ AI_prompts.md, requirements.txt, .env.example, .gitignore, .mcp.json, README.md, data/ (campus_customs.db, campus_customs_new.md), frontend/, backend/ (main/py, models.py, prompts/ boss.md, inventory.md, accounting.md, facilities.md, customer_service.md), output/ (harness.md, mcp_smoke.json, desk_tickets.html, design.md, resolved_tickets.json, resolved_board.html, audit_trail.json, github_url.txt)
+>
+> README should explain: copy original DB to the working copy when you need a clean run, start MCP server, start FastAPI backend, start React board, reset the DB before a full three-ticket run
+
+**Follow-up prompt:**
+
+> great. before i push this to github, could you confirm that all questions were sufficiently responded to. Are there any outstanding concerns? or things i need to know?
+
+(Then: "yes" to applying the four fixes it found.)
+
+**What was lacking after the first prompt:** The first prompt didn't ask for a final check, which turned up a few gaps before the push: a missing "what was lacking" line for Problem 4, smoke-test values that no longer matched the post-run working database, unpinned dependency versions, and the need to explain why Portkey reports the model as `gpt-6-luna-global`.
 

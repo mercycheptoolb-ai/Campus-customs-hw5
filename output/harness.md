@@ -320,7 +320,7 @@ Shop facts are never read back from this file. They come only from the MCP serve
 - **Kill switch and monitoring:** `/api/stop` exists now; add alerts for refusals, repeated errors and unusual spending.
 
 ### Token limits (multi-agent chats burn tokens fast)
-- **One model only:** `gpt-6-luna`, hard-coded and with no override.
+- **One model only:** `gpt-6-luna`, hard-coded and with no override. Portkey's responses report the served model as **`gpt-6-luna-global`**, which is its deployment name for `gpt-6-luna`, not a different model. The code only ever requests `gpt-6-luna`, and the audit trail records both (`model_requested` / `model_served`).
 - **Per agent loop:** `UsageLimits(request_limit=10)`, i.e. at most 10 model calls per agent run.
 - **Delegation limits:** no delegating to yourself or to anyone already up the chain, chains at most 4 agents deep, at most 12 delegations per ticket.
 - **One ticket at a time,** and a continue run skips tickets still waiting on a human.

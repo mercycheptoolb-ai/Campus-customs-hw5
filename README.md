@@ -60,7 +60,7 @@ npm --prefix frontend install
 cp .env.example .env          # then edit .env and set PORTKEY_API_KEY=<your key>
 ```
 
-Every agent uses **only `gpt-6-luna` through Portkey**. The model name is a fixed constant in `backend/agents/config.py`. The key is read from `PORTKEY_API_KEY` in `.env` (in `hw5/` or any parent folder), and it is never logged or committed.
+Every agent uses **only `gpt-6-luna` through Portkey**. The model name is a fixed constant in `backend/agents/config.py`. The key is read from `PORTKEY_API_KEY` in `.env` (in `hw5/` or any parent folder), and it is never logged or committed. Portkey's responses report the served model as **`gpt-6-luna-global`**, which is its deployment name for `gpt-6-luna`, not a different model. The code only ever requests `gpt-6-luna`, and the audit trail records both (`model_requested` / `model_served`).
 
 ---
 

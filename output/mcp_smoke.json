@@ -1,5 +1,7 @@
 {
   "description": "HW5 Problem 4 smoke test. Each tool was called by the vibe coder (Claude Code) through the campus-customs MCP server registered in hw5/.mcp.json. Each output is checked against direct SQL on data/campus_customs_new.db.",
+  "captured": "2026-10-10, Problem 4, on a fresh working copy (identical to data/campus_customs.db). Every value matched data/campus_customs_new.db at that time.",
+  "reproduce": "The committed data/campus_customs_new.db is in its final post-Problem-9 state (invoice 501 paid, lease 1 next_due 2026-10-02, checking $152). To reproduce these exact outputs, reset first: cp data/campus_customs.db data/campus_customs_new.db (or POST /api/reset), then call the three tools. check_stock is unchanged either way (tee size S is still 0 on hand).",
   "database": "data/campus_customs_new.db",
   "mcp_config": ".mcp.json",
   "shop_today": {
